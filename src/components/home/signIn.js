@@ -1,17 +1,19 @@
 import React from "react";
 import FrmSignInSide from "./frm/frmSignIn";
+import CustomAlert from "../alert/Alert";
 import { connect } from "react-redux";
 import { login } from "../../actions/login.actions";
 import { Redirect } from "react-router-dom";
 import { Backdrop } from "@material-ui/core";
 
-class SignIn extends React.Component{
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: "",
       password: "",
+      open: false,
     };
   }
 
@@ -20,10 +22,16 @@ class SignIn extends React.Component{
   };
 
   onSubmit = () => {
-    this.props.login({ ...this.state }).then(
-      (res) => alert("ok"),
-      (err) => console.log(err)
-    );
+    this.props
+      .login({ email: this.state.email, password: this.state.password })
+      .then(
+        (res) => {
+        },
+        (err) => {
+          this.setState({ ...this.state, open: true });
+          console.log(err);
+        }
+      );
   };
 
   render() {
@@ -32,16 +40,23 @@ class SignIn extends React.Component{
         <Backdrop
           style={{ zIndex: 2, color: "#fff" }}
           open={this.props.backDrop}
-        >
-        </Backdrop>
+        ></Backdrop>
         {this.props.isAuthenticated ? (
           <Redirect to="/home" />
         ) : (
-          <FrmSignInSide
-            {...this.state}
-            onChange={this.onChange}
-            onClick={this.onSubmit}
-          />
+          <>
+            <CustomAlert
+              Open={this.state.open}
+              SetOpen={this.onChange}
+              Type="error"
+              Message="Error de autenticación, verifique e intentelo de nuevo."
+            ></CustomAlert>
+            <FrmSignInSide
+              {...this.state}
+              onChange={this.onChange}
+              onClick={this.onSubmit}
+            />
+          </>
         )}
       </>
     );

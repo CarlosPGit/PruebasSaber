@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { putTitle } from "../../actions/layout.actions";
 import { getRandomQuestions } from "../../actions/data.actions";
 import { getMaterias } from "../../api/materias.api";
@@ -12,30 +13,36 @@ class Home extends React.Component {
     this.state = {
       title: "Simulacro Pruebas Saber",
       materias: [],
-      preguntas: []
+      preguntas: [],
     };
   }
 
   componentDidMount() {
-    this.props.putTitle(this.state.title);
-    getMaterias().then(
-      (res) => {
-        this.setState({ ...this.state, materias: res.data });
-      },
-      (err) => {}
-    );
+    if (this.props.isAuthenticated) {
+      this.props.putTitle(this.state.title);
+      getMaterias().then(
+        (res) => {
+          this.setState({ ...this.state, materias: res.data });
+        },
+        (err) => {}
+      );
+    }
   }
 
   render() {
     const setQuestions = (data) => this.props.getRandomQuestions(data);
     return (
       <>
-        <div style={{ marginTop: 30 }}>
-          <Pregunta
-            Materias={this.state.materias}
-            setPreguntas={setQuestions}
-          ></Pregunta>
-        </div>
+        {!this.props.isAuthenticated ? (
+          <Redirect to="/signin" />
+        ) : (
+          <div style={{ marginTop: 30 }}>
+            <Pregunta
+              Materias={this.state.materias}
+              setPreguntas={setQuestions}
+            ></Pregunta>
+          </div>
+        )}
       </>
     );
   }
@@ -43,6 +50,7 @@ class Home extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    isAuthenticated: state.auth.isAuthenticated,
   };
 }
 

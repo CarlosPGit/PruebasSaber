@@ -32,23 +32,25 @@ export default function setAuthorizationToken() {
     function (error) {
       store.dispatch(showBackDrop(false));
       // Do something with response error
-      if (error.response.status === 401) {
-        localStorage.removeItem("jwtToken");
-        delete axios.defaults.headers.common["Authorization"];
+      if (localStorage.jwtToken) {
+        if (error.response.status === 401) {
+          localStorage.removeItem("jwtToken");
+          delete axios.defaults.headers.common["Authorization"];
 
-        Swal.fire({
-          title: "La sesion expiro",
-          text: "Sera redirigido al login.",
-          icon: "warning",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Login",
-        }).then((result) => {
-          if (result.value) {
-            store.dispatch(setCurrentUser({}));
-          }
-        });
-      } else return Promise.reject(error.response);
+          Swal.fire({
+            title: "La sesion expiro",
+            text: "Sera redirigido al login.",
+            icon: "warning",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Login",
+          }).then((result) => {
+            if (result.value) {
+              store.dispatch(setCurrentUser({}));
+            }
+          });
+        } else return Promise.reject(error.response);
+      }
     }
   );
 }

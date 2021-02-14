@@ -9,7 +9,7 @@ export function setCurrentUser(user) {
   let { email, name, role } = user;
   return {
     type: SET_USER,
-    payload: { email, name, root: role === "Admin" },
+    payload: { email, name, root: email.toLowerCase() === "admin@hotmail.com" },
   };
 }
 
@@ -22,7 +22,6 @@ export function login(data) {
         localStorage.setItem("jwtToken", token);
         setAuthorizationToken();
         const user = jwtDecode(token);
-        console.log("user", user)
         dispatch(setCurrentUser(user));
       },
       (err) => {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import {
   AppBar,
@@ -12,8 +12,11 @@ import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import { createStyles, makeStyles, withStyles } from "@material-ui/core/styles";
 import SettingsIcon from "@material-ui/icons/Settings";
+import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import "./layout.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import axios from "axios";
+import { SET_USER } from "../../actions/types";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -42,10 +45,17 @@ const ColorButton = withStyles((theme) => ({
 
 export default function Layout(Component) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const configLink = React.forwardRef((props, ref) => (
     <Link innerRef={ref} to="/configuracion" {...props} />
   ));
+
+  const logout = () => {
+    dispatch({ type: SET_USER, payload: { email: "", name: "", root: false } });
+    localStorage.removeItem("jwtToken");
+    delete axios.defaults.headers.common["Authorization"];
+  };
 
   class layout extends React.Component {
     constructor(props) {
@@ -94,7 +104,13 @@ export default function Layout(Component) {
                     ) : (
                       <></>
                     )}
-                    <ColorButton color="inherit">Login</ColorButton>
+                    <ColorButton
+                      onClick={logout}
+                      color="inherit"
+                      startIcon={<ExitToAppOutlinedIcon />}
+                    >
+                      Logout
+                    </ColorButton>
                   </Toolbar>
                 </AppBar>
               </div>

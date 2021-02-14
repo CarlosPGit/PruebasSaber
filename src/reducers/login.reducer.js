@@ -13,7 +13,7 @@ const loginReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
       return {
-        isAuthenticated: action.payload.Email !== "",
+        isAuthenticated: action.payload.email !== "",
         user: action.payload,
       };
     default:
