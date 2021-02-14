@@ -1,0 +1,56 @@
+body{
+  background-color: rgb(240 235 248);
+}
+
+main .contenido {
+  margin-left: 5rem;
+  margin-right: 5rem;
+  padding: 1rem;
+}
+
+/* breadcrums */
+.breadcrumb {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  font-size: 18px;
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+}
+
+
+.parallelogram { 
+  padding: 1px; 
+  -webkit-transform: skew(-15deg); 
+  -moz-transform: skew(-15deg); 
+  transform: skew(-15deg);
+  background: #673ab7;
+  margin: 10px
+}
+
+.parallelogram .text {
+  width: 200px;
+  -webkit-transform: skew(15deg); 
+  -moz-transform: skew(15deg); 
+  transform: skew(15deg);
+  margin-left: 20px;
+  color: #ffffff
+}
+
+/* .parallelogram {
+  width: 250px; 
+  height: 0px; 
+  background: transparent;
+ border-right: 60px solid transparent;
+ border-bottom: 30px solid #428bca;
+}
+
+.parallelogram .text{
+padding:10px
+} */
